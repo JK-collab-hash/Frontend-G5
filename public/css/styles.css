@@ -1,0 +1,161 @@
+.bg-bg {
+  background-image: url('../img/fondo-recortado.jpg');
+  background-size: cover;
+  background-position: right;
+  position: absolute;
+  width: 100%;
+  min-height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.body-bg {
+  background-color: #eaeaea;
+}
+
+.form-control:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 .2rem rgba(220, 53, 69, .2);
+}
+
+#navbar {
+  background-color: #eaeaea;
+  padding: .85rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #c5c5c5;
+}
+
+#navbar .nav-left {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+#navbar img {
+  height: 40px;
+  object-fit: contain;
+}
+
+#navbar .nav-titulo {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #2c2c2c;
+}
+
+#navbar .btn-salir {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: .35rem 1rem;
+  border-radius: 6px;
+  font-size: .88rem;
+  cursor: pointer;
+}
+
+#navbar .btn-salir:hover {
+  background-color: #b02a37;
+}
+
+.contenido{
+  max-width: 860px;
+  margin: 2.5rem auto;
+  padding: 0 1.5rem;
+}
+
+.error {
+  color: #842029;
+  background-color: #f8d7da;
+  border: 1px solid #f5c2c7;
+  border-radius: 6px;
+  padding: .6rem 1rem;
+  font-size: .88rem;
+}
+
+.exito {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border: 1px solid #badbcc;
+  border-radius: 6px;
+  padding: .6rem 1rem;
+  font-size: .88rem;
+}
+
+.stat-card {
+  background-color: #dc3545;
+  color: #fff;
+  border-radius: 10px;
+  padding: 1.25rem 2rem;
+  text-align: center;
+}
+
+.stat-card .stat-num {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.stat-card .stat-lbl {
+  font-size: .8rem;
+  opacity: .85;
+}
+
+.tab-barra {
+  display: flex;
+  gap: .5rem;
+  border-bottom: 2px solid #c5c5c5;
+  margin-bottom: 1.5rem;
+}
+
+.tab-barra button {
+  background: none;
+  border: none;
+  padding: .6rem 1.2rem;
+  font-size: .95rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #6c757d;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+}
+
+.tab-barra button:hover,
+.tab-barra button.activo {
+  color: #dc3545;
+  border-bottom-color: #dc3545;
+}
+
+#candGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: .6rem;
+  margin: .75rem 0;
+}
+
+#candGrid > div {
+  background: #eaeaea;
+  border: 1px solid #c5c5c5;
+  border-radius: 8px;
+  padding: .6rem .9rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+#candGrid input[type="checkbox"] {
+  accent-color: #dc3545;
+}
+
+#nuevo-candidato {
+  display: flex;
+  gap: .6rem;
+  flex-wrap: wrap;
+  margin-top: .75rem;
+}
+
+#nuevo-candidato input,
+#nuevo-candidato select {
+  flex: 1;
+  min-width: 150px;
+}

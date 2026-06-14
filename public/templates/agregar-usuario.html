@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agregar Usuario</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+  <nav id="navbar">
+    <div class="nav-left">
+      <img src="../img/logo1.png" alt="Logo">
+    </div>
+    <a href="/dashboard" class="btn btn-outline-secondary btn-sm">← Volver</a>
+  </nav>
+  <div class="contenido">
+    <h2 class="mb-1" data-aos="fade-down">Agregar nuevo usuario</h2>
+    <p class="text-muted mb-4">DNI y distrito son obligatorios. Cargo y partido son opcionales.</p>
+    <div data-aos="fade-up">
+      <div class="mb-3">
+        <label class="form-label fw-semibold" for="dni">DNI(Obligatorio)</label>
+        <input class="form-control" type="text" id="dni" placeholder="Ej. 12345678" maxlength="8"
+          oninput="this.value=this.value.replace(/\D/,'')">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold" for="nombre">Nombre(Obligatorio)</label>
+        <input class="form-control" type="text" id="nombre" placeholder="Ej. Juan Pérez García">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold" for="distrito">Distrito(Obligatorio)</label>
+        <select class="form-select" id="distrito">
+          <option value="">Selecciona</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold" for="cargo">Cargo</label>
+        <select class="form-select" id="cargo">
+          <option value="">Sin cargo especial</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold" for="partido">Partido político</label>
+        <select class="form-select" id="partido">
+          <option value="">Sin partido</option>
+        </select>
+      </div>
+      <button class="btn btn-danger w-100" onclick="guardar()">Crear usuario</button>
+      <div class="mt-3" id="alerta"></div>
+    </div>
+  </div>
+  <script src="/js/agregar-usuario.js"></script>
+  <script src="/js/JavaScript.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+</body>
+</html>
