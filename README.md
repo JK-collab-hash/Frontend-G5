@@ -23,9 +23,9 @@ node index.js
 ```
 ## Requerimientos
 Son los requisitos para que este proyecto pueda funcionar.
--Node.js 22
--NPM 11
--MySQL 8.0
+- Node.js 22
+- NPM 11
+- MySQL 8.0
 ## Tecnologías Utilizadas  
 ### Backend
 - Node.js
