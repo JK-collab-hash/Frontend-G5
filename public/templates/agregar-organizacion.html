@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agregar Organización</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+  <nav id="navbar">
+    <div class="nav-left">
+      <img src="../img/logo1.png" alt="Logo">
+    </div>
+    <a href="/dashboard" class="btn btn-outline-secondary btn-sm">Atras</a>
+  </nav>
+
+  <div class="contenido contenido-ancha">
+    <div class="ao-grid">
+      <div class="ao-card ao-card--izq" data-aos="fade-up">
+        <h2 class="mb-1">Agregar organización</h2>
+        <p class="text-muted mb-4">Partidos, instituciones, empresas u otro tipo de organización.</p>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="nombreOrganizacion">
+            Nombre <span class="text-danger">*</span>
+          </label>
+          <input class="form-control" type="text" id="nombreOrganizacion"
+            placeholder="Ej. Partido A" oninput="quitarError(this)">
+          <div class="invalid-feedback">El nombre de la organización es obligatorio.</div>
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-semibold" for="tipoOrganizacion">Tipo</label>
+          <select class="form-select" id="tipoOrganizacion">
+            <option value="partido">Partido</option>
+            <option value="institucion">Institución</option>
+            <option value="empresa">Empresa</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+
+        <hr>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Agregar miembros (Opcional)</label>
+
+          <div class="row g-2 align-items-end mb-2">
+            <div class="col-md-4">
+              <label class="form-label fw-semibold mb-1" for="miembroDni">DNI del usuario</label>
+              <input class="form-control form-control-sm" type="text" id="miembroDni" placeholder="Ej. 12345678" maxlength="8" oninput="this.value=this.value.replace(/\D/g,''); quitarError(this)">
+              <div class="invalid-feedback">Ingresa un DNI de 8 dígitos.</div>
+            </div>
+            <div class="col-md-5">
+              <label class="form-label fw-semibold mb-1" for="miembroRolSel">Rol interno</label>
+              <div class="d-flex gap-2">
+                <select class="form-select form-select-sm" id="miembroRolSel"
+                  onchange="toggleRolCustom()">
+                  <option value="Miembro">Miembro</option>
+                  <option value="Secretario General">Secretario General</option>
+                  <option value="Secretario">Secretario</option>
+                  <option value="Decano">Decano</option>
+                  <option value="Presidente">Presidente</option>
+                  <option value="Vicepresidente">Vicepresidente</option>
+                  <option value="Tesorero">Tesorero</option>
+                  <option value="Vocal">Vocal</option>
+                  <option value="Gerente">Gerente</option>
+                  <option value="Director">Director</option>
+                  <option value="Coordinador">Coordinador</option>
+                  <option value="__otro__">Otro…</option>
+                </select>
+                <input class="form-control form-control-sm" type="text" id="miembroRolCustom"
+                  placeholder="Escribe el rol" style="display:none;">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-outline-danger btn-sm w-100" onclick="agregarFilaMiembro()">Añadir</button>
+            </div>
+          </div>
+          <div id="listaMiembros"></div>
+        </div>
+
+        <button class="btn btn-danger w-100 mt-3" onclick="guardarOrganizacion()">Crear organización </button>
+        <div class="mt-3" id="alerta"></div>
+        <p class="text-muted mt-2 mb-0 ao-nota"><strong>Organización</strong> es la entidad a la que pertenecen las personas o a la que representa un candidato</p>
+      </div>
+
+      <div class="ao-col-der">
+        <div class="ao-card ao-card--der" data-aos="fade-up">
+          <h4 class="mb-1">Agregar cargo</h4>
+          <p class="text-muted mb-3">Crea el nombre del puesto y define a qué ámbito pertenece.</p>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="nombreCargo">Nombre del cargo <span class="text-danger">*</span>
+            </label>
+            <input class="form-control" type="text" id="nombreCargo"
+              placeholder="Ej. Alcalde, Decano, Secretario General" oninput="quitarError(this)">
+            <div class="invalid-feedback">El nombre del cargo es obligatorio.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="tipoCargo">Tipo</label>
+            <select class="form-select" id="tipoCargo">
+              <option value="nacional">Nacional</option>
+              <option value="distrital">Distrital</option>
+              <option value="provincial">Provincial</option>
+              <option value="departamental">Departamental</option>
+              <option value="institucional">Institucional</option>
+              <option value="partido">Partido</option>
+            </select>
+            <div class="form-text">
+              <p> Nacional: se vota en todo el país. Distrital: aplica a un distrito específico.</p>
+              <p> Nacional: se vota en todo el país. Distrital: aplica a un distrito específico.</p>
+              <p> Provincial: aplica a una provincia. Departamental: aplica a un departamento.</p>
+              <p> Institucional: aplica a una institución (colegio, universidad, empresa).</p>
+              <p> Partido: cargo interno de una organización política.</p>
+            </div>
+          </div>
+
+          <button class="btn btn-outline-danger w-100" onclick="guardarCargo()">Crear cargo</button>
+          <div class="mt-3" id="alertaCargo"></div>
+
+          <p class="text-muted mt-2 mb-0 ao-nota"><strong>Cargo</strong> es el puesto que se disputa en una votación (Presidente, Alcalde, Decano, Regidor, etc.) y su tipo define el tipo (nacional, distrital, institucional o de partido).</p>
+        </div>
+
+        <div class="ao-card ao-card--der" data-aos="fade-up">
+          <h4 class="mb-1">Agregar distrito</h4>
+          <p class="text-muted mb-3">Usado para las votaciones de tipo distrital y para asignar el distrito de cada usuario.</p>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="nombreDistrito">Nombre del distrito <span class="text-danger">*</span></label>
+            <input class="form-control" type="text" id="nombreDistrito" placeholder="Ej. San Isidro" oninput="quitarError(this)">
+            <div class="invalid-feedback">El nombre del distrito es obligatorio.</div>
+          </div>
+
+          <button class="btn btn-outline-danger w-100" onclick="guardarDistrito()">Crear distrito</button>
+          <div class="mt-3" id="alertaDistrito"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/agregar-organizacion.js"></script>
+  <script src="/js/JavaScript.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>AOS.init();</script>
+</body>
+</html>

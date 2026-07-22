@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Cuentas</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+  <nav id="navbar">
+    <div class="nav-left">
+      <img src="../img/logo1.png" alt="Logo">
+    </div>
+    <a href="/dashboard" class="btn btn-outline-secondary btn-sm">Atras</a>
+  </nav>
+
+  <div class="contenido contenido-ancha">
+    <h2 class="mb-1" data-aos="fade-down">Cuentas registradas</h2>
+    <p class="text-muted mb-4">Listado de usuarios, administradores y candidatos del sistema.</p>
+
+    <div class="tab-barra" data-aos="fade-up">
+      <button class="activo" onclick="switchTabCuentas('usuarios', this)">Usuarios</button>
+      <button onclick="switchTabCuentas('admins', this)">Administradores</button>
+      <button onclick="switchTabCuentas('candidatos', this)">Candidatos</button>
+      <button onclick="switchTabCuentas('solicitudes', this)">Cambios de contraseña <span id="badge-solicitudes" class="gc-badge" style="display:none;"></span></button>
+    </div>
+
+    <div id="tab-usuarios">
+      <div class="gc-search mb-3">
+        <input type="text" class="form-control form-control-sm"
+          id="buscar-usuarios" placeholder="Buscar por DNI o nombre…"
+          oninput="filtrarTabla('buscar-usuarios', 'tbody-usuarios')">
+      </div>
+      <div class="gc-table-wrap">
+        <table class="table gc-table">
+          <thead>
+            <tr>
+              <th>DNI</th>
+              <th>Nombre completo</th>
+              <th>Cargo</th>
+              <th>Distrito</th>
+              <th>Organización(es)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody-usuarios">
+            <tr><td colspan="6" class="text-muted text-center py-3">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-admins" style="display:none;">
+      <div class="gc-search mb-3">
+        <input type="text" class="form-control form-control-sm"
+          id="buscar-admins" placeholder="Buscar por DNI o nombre…"
+          oninput="filtrarTabla('buscar-admins', 'tbody-admins')">
+      </div>
+      <div class="gc-table-wrap">
+        <table class="table gc-table">
+          <thead>
+            <tr>
+              <th>DNI</th>
+              <th>Nombre completo</th>
+              <th>Cargo</th>
+              <th>Distrito</th>
+              <th>Organización(es)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody-admins">
+            <tr><td colspan="6" class="text-muted text-center py-3">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-candidatos" style="display:none;">
+      <div class="gc-search mb-3">
+        <input type="text" class="form-control form-control-sm"
+          id="buscar-candidatos" placeholder="Buscar por DNI o nombre…"
+          oninput="filtrarTabla('buscar-candidatos', 'tbody-candidatos')">
+      </div>
+      <div class="gc-table-wrap">
+        <table class="table gc-table">
+          <thead>
+            <tr>
+              <th>DNI</th>
+              <th>Nombre completo</th>
+              <th>Cargo al que postula</th>
+              <th>Postula con</th>
+              <th>Organización(es)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody-candidatos">
+            <tr><td colspan="6" class="text-muted text-center py-3">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-solicitudes" style="display:none;">
+      <p class="text-muted mb-3">
+        Solicitudes de cambio de contraseña hechas desde el login. Al aprobar, la contraseña
+        se actualiza inmediatamente; al rechazar, se descarta y la persona debe volver a solicitarlo.
+      </p>
+      <div class="gc-table-wrap">
+        <table class="table gc-table">
+          <thead>
+            <tr>
+              <th>DNI</th>
+              <th>Nombre completo</th>
+              <th>Fecha de solicitud</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody-solicitudes">
+            <tr><td colspan="4" class="text-muted text-center py-3">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h6 class="fw-semibold mt-4 mb-2">Historial (últimas resueltas)</h6>
+      <div class="gc-table-wrap">
+        <table class="table gc-table">
+          <thead>
+            <tr>
+              <th>DNI</th>
+              <th>Nombre completo</th>
+              <th>Resultado</th>
+              <th>Fecha de solicitud</th>
+              <th>Fecha de resolución</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-historial-solicitudes">
+            <tr><td colspan="5" class="text-muted text-center py-3">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalEditarCuenta" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar cuenta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="ed-dniOriginal">
+          <input type="hidden" id="ed-tipo">
+
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label fw-semibold" for="ed-dni">DNI</label>
+              <input class="form-control" type="text" id="ed-dni" maxlength="8"
+                oninput="this.value=this.value.replace(/\D/g,''); quitarError(this)">
+              <div class="invalid-feedback">El DNI debe tener exactamente 8 dígitos.</div>
+            </div>
+            <div class="col-md-8 mb-3">
+              <label class="form-label fw-semibold" for="ed-nombre">Nombre</label>
+              <input class="form-control" type="text" id="ed-nombre"
+                oninput="this.value=this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s'-]/g,''); quitarError(this)">
+              <div class="invalid-feedback">El nombre es obligatorio.</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold" for="ed-apellidoP">Apellido paterno</label>
+              <input class="form-control" type="text" id="ed-apellidoP"
+                oninput="this.value=this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s'-]/g,''); quitarError(this)">
+              <div class="invalid-feedback">Obligatorio.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold" for="ed-apellidoM">Apellido materno</label>
+              <input class="form-control" type="text" id="ed-apellidoM"
+                oninput="this.value=this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s'-]/g,''); quitarError(this)">
+              <div class="invalid-feedback">Obligatorio.</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="ed-contraseña">Nueva contraseña</label>
+            <div class="input-group">
+              <input class="form-control" type="password" id="ed-contraseña" placeholder="Dejar en blanco para no cambiarla" minlength="9">
+              <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('ed-contraseña', this)">
+                <svg class="icon-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="icon-eye-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.8 21.8 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 7 11 7a21.8 21.8 0 0 1-2.16 3.19M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
+            <small class="text-muted">Si lo dejas vacío, se conserva la contraseña actual. Si la cambias, debe tener mínimo 9 caracteres.</small>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold" for="ed-departamento">Departamento</label>
+              <select class="form-select" id="ed-departamento" onchange="onDepartamentoChangeEdicion(); quitarError(this)"></select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold" for="ed-provincia">Provincia</label>
+              <select class="form-select" id="ed-provincia" onchange="onProvinciaChangeEdicion(); quitarError(this)" disabled></select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold" for="ed-distrito">Distrito</label>
+              <select class="form-select" id="ed-distrito" onchange="quitarError(this)" disabled></select>
+              <div class="invalid-feedback">Selecciona un distrito.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold" for="ed-cargo">Cargo que ocupa (Opcional)</label>
+              <select class="form-select" id="ed-cargo"></select>
+            </div>
+          </div>
+
+          <hr>
+          <h6 class="fw-semibold">Organizaciones</h6>
+          <div id="ed-orgs-actuales" class="mb-2"></div>
+          <div class="input-group mb-3">
+            <select class="form-select" id="ed-org-nueva"></select>
+            <input class="form-control" style="max-width:180px" id="ed-org-rol" placeholder="Rol (opcional)">
+            <button class="btn btn-outline-secondary" type="button" onclick="agregarOrganizacionEdicion()">Añadir</button>
+          </div>
+
+          <hr>
+          <h6 class="fw-semibold">Postulación a un cargo</h6>
+          <div id="ed-candidaturas-actuales" class="mb-2"></div>
+          <div class="input-group mb-3">
+            <select class="form-select" id="ed-postula-cargo"></select>
+            <select class="form-select" id="ed-postula-org"></select>
+            <button class="btn btn-outline-secondary" type="button" onclick="postularComoCandidato()">Postular</button>
+          </div>
+          <small class="text-muted d-block mb-3">
+            Al postular, esta persona aparecerá en la pestaña "Candidatos". Al finalizar la postulación
+            (botón "Finalizar" en esa pestaña, o aquí abajo), vuelve automáticamente a "Usuarios".
+          </small>
+          <div id="ed-alerta"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-danger" onclick="guardarEdicionCuenta()">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalEditarCandidatura" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cd-modal-titulo">Editar postulación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="cd-candidatoId">
+          <input type="hidden" id="cd-dni">
+          <p class="mb-3" id="cd-persona-nombre"></p>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="cd-cargo">Cargo al que postula</label>
+            <select class="form-select" id="cd-cargo"></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="cd-org">Postula con (organización)</label>
+            <select class="form-select" id="cd-org"></select>
+          </div>
+
+          <div id="cd-alerta"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-danger me-auto" id="cd-btn-finalizar" onclick="finalizarCandidatura()">Finalizar postulación</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-danger" onclick="guardarEdicionCandidatura()">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/gestion-cuenta.js"></script>
+  <script src="/js/JavaScript.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>AOS.init();</script>
+</body>
+</html>

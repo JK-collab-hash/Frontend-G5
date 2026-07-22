@@ -13,49 +13,149 @@
     <div class="nav-left">
       <img src="../img/logo1.png" alt="Logo">
     </div>
-    <a href="/dashboard" class="btn btn-outline-secondary btn-sm">← Volver</a>
+    <a href="/dashboard" class="btn btn-outline-secondary btn-sm">Atras</a>
   </nav>
   <div class="contenido">
-    <h2 class="mb-1" data-aos="fade-down">Agregar nuevo usuario</h2>
-    <p class="text-muted mb-4">DNI y distrito son obligatorios. Cargo y partido son opcionales.</p>
+    <h2 class="mb-1" data-aos="fade-down">Agregar nueva cuenta</h2>
+    <p class="text-muted mb-4">Selecciona el tipo de cuenta a crear.</p>
     <div data-aos="fade-up">
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold" for="tipoCuenta">Tipo de cuenta</label>
+        <select class="form-select" id="tipoCuenta" onchange="actualizarFormulario()">
+          <option value="usuario">Usuario</option>
+          <option value="admin">Administrador</option>
+          <option value="candidato">Candidato</option>
+        </select>
+      </div>
+
       <div class="mb-3">
-        <label class="form-label fw-semibold" for="dni">DNI(Obligatorio)</label>
+        <label class="form-label fw-semibold" for="dni">DNI <span class="text-danger">*</span></label>
         <input class="form-control" type="text" id="dni" placeholder="Ej. 12345678" maxlength="8"
-          oninput="this.value=this.value.replace(/\D/,'')">
+          oninput="this.value=this.value.replace(/\D/g,''); quitarError(this)">
+        <div class="invalid-feedback">El DNI debe tener exactamente 8 dígitos numéricos.</div>
       </div>
+
       <div class="mb-3">
-        <label class="form-label fw-semibold" for="nombre">Nombre(Obligatorio)</label>
-        <input class="form-control" type="text" id="nombre" placeholder="Ej. Juan Pérez García">
+        <label class="form-label fw-semibold" for="nombre">Nombre <span class="text-danger">*</span></label>
+        <input class="form-control" type="text" id="nombre" placeholder="Ingrese su nombre" oninput="this.value=this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s'-]/g,''); quitarError(this)">
+        <div class="invalid-feedback">El nombre es obligatorio.</div>
       </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-semibold" for="apellidoP">Apellido paterno <span class="text-danger">*</span></label>
+          <input class="form-control" type="text" id="apellidoP" placeholder="Ingrese su apellido paterno" oninput="this.value=this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s'-]/g,''); quitarError(this)">
+          <div class="invalid-feedback">El apellido paterno es obligatorio.</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-semibold" for="apellidoM">Apellido materno <span class="text-danger">*</span></label>
+          <input class="form-control" type="text" id="apellidoM" placeholder="Ingrese su apellido materno" oninput="this.value=this.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s'-]/g,''); quitarError(this)">
+          <div class="invalid-feedback">El apellido materno es obligatorio.</div>
+        </div>
+      </div>
+
       <div class="mb-3">
-        <label class="form-label fw-semibold" for="distrito">Distrito(Obligatorio)</label>
-        <select class="form-select" id="distrito">
-          <option value="">Selecciona</option>
-        </select>
+        <label class="form-label fw-semibold" for="contraseña">Contraseña <span class="text-danger">*</span></label>
+        <div class="input-group">
+          <input class="form-control" type="password" id="contraseña" placeholder="Contraseña" minlength="9" oninput="quitarError(this)">
+          <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('contraseña', this)">
+            <svg class="icon-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="icon-eye-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.8 21.8 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 7 11 7a21.8 21.8 0 0 1-2.16 3.19M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+        <small class="text-muted">Mínimo 9 caracteres (letras, números o símbolos, como prefieras).</small>
+        <div class="invalid-feedback">La contraseña debe tener al menos 9 caracteres.</div>
       </div>
+
       <div class="mb-3">
-        <label class="form-label fw-semibold" for="cargo">Cargo</label>
-        <select class="form-select" id="cargo">
-          <option value="">Sin cargo especial</option>
-        </select>
+        <label class="form-label fw-semibold" for="departamento">Departamento <span class="text-danger">*</span></label>
+        <div class="d-flex gap-2">
+          <select class="form-select" id="departamento" onchange="onDepartamentoChange(); quitarError(this)">
+            <option value="">Selecciona</option>
+          </select>
+          <button class="btn btn-outline-secondary" type="button" onclick="toggleNuevo('departamento')">+</button>
+        </div>
+        <div class="invalid-feedback">Selecciona un departamento.</div>
+        <div id="nuevo-departamento" class="input-group mt-2" style="display:none;">
+          <input class="form-control" id="nuevo-departamento-nombre" placeholder="Nombre del nuevo departamento">
+          <button class="btn btn-outline-danger" type="button" onclick="crearDepartamentoRapido()">Crear</button>
+        </div>
       </div>
+
       <div class="mb-3">
-        <label class="form-label fw-semibold" for="partido">Partido político</label>
-        <select class="form-select" id="partido">
-          <option value="">Sin partido</option>
-        </select>
+        <label class="form-label fw-semibold" for="provincia">Provincia <span class="text-danger">*</span></label>
+        <div class="d-flex gap-2">
+          <select class="form-select" id="provincia" onchange="onProvinciaChange(); quitarError(this)" disabled>
+            <option value="">Selecciona un departamento primero</option>
+          </select>
+          <button class="btn btn-outline-secondary" type="button" onclick="toggleNuevo('provincia')">+</button>
+        </div>
+        <div class="invalid-feedback">Selecciona una provincia.</div>
+        <div id="nuevo-provincia" class="input-group mt-2" style="display:none;">
+          <input class="form-control" id="nuevo-provincia-nombre" placeholder="Nombre de la nueva provincia">
+          <button class="btn btn-outline-danger" type="button" onclick="crearProvinciaRapida()">Crear</button>
+        </div>
       </div>
-      <button class="btn btn-danger w-100" onclick="guardar()">Crear usuario</button>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold" for="distrito">Distrito <span class="text-danger">*</span></label>
+        <div class="d-flex gap-2">
+          <select class="form-select" id="distrito" onchange="quitarError(this)" disabled>
+            <option value="">Selecciona una provincia primero</option>
+          </select>
+          <button class="btn btn-outline-secondary" type="button" onclick="toggleNuevo('distrito')">+</button>
+        </div>
+        <div class="invalid-feedback">Selecciona un distrito.</div>
+        <div id="nuevo-distrito" class="input-group mt-2" style="display:none;">
+          <input class="form-control" id="nuevo-distrito-nombre" placeholder="Nombre del nuevo distrito">
+          <button class="btn btn-outline-danger" type="button" onclick="crearDistritoRapido()">Crear</button>
+        </div>
+      </div>
+
+      <div id="bloque-cargo-general">
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="cargoGeneral">Cargo que ocupa (Opcional)</label>
+          <select class="form-select" id="cargoGeneral">
+            <option value="">Sin cargo</option>
+          </select>
+          <small class="text-muted">
+            El puesto actual de la persona (ej. Decano, Secretario General). No tiene relación con una votación.
+          </small>
+        </div>
+      </div>
+
+      <div id="bloque-candidato" style="display:none;">
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="cargoPostula">Cargo al que postula <span class="text-danger">*</span></label>
+          <select class="form-select" id="cargoPostula" onchange="quitarError(this)">
+            <option value="">Selecciona</option>
+          </select>
+          <div class="invalid-feedback">Debes seleccionar el cargo al que postula.</div>
+        </div>
+      </div>
+
+      <div id="bloque-organizaciones">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Organizaciones a las que pertenece (Opcional)</label>
+          <div id="organizacion-checkboxes" class="border rounded p-2">
+          </div>
+          <small class="text-muted">
+            El <strong>Cargo</strong> es el puesto oficial de la persona (ej. Decano, Alcalde) y puede usarse en votaciones.
+            El <strong>Rol</strong> es solo su posición dentro de esa organización (ej. Secretario del Partido A) y no participa en elecciones.
+            Si dejas el rol en blanco, se guarda como "Miembro".
+          </small>
+        </div>
+      </div>
+
+      <button class="btn btn-danger w-100 mt-3" onclick="guardar()">Crear cuenta</button>
       <div class="mt-3" id="alerta"></div>
     </div>
   </div>
+
   <script src="/js/agregar-usuario.js"></script>
   <script src="/js/JavaScript.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    AOS.init();
-  </script>
+  <script>AOS.init();</script>
 </body>
 </html>

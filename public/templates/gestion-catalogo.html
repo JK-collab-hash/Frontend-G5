@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Catálogos</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+  <nav id="navbar">
+    <div class="nav-left">
+      <img src="../img/logo1.png" alt="Logo">
+    </div>
+    <a href="/dashboard" class="btn btn-outline-secondary btn-sm">Atras</a>
+  </nav>
+
+  <div class="contenido contenido-ancha">
+    <h2 class="mb-1" data-aos="fade-down">Gestión de catálogos</h2>
+    <p class="text-muted mb-4">Organizaciones, cargos, departamentos, provincias y distritos del sistema.</p>
+    <div class="tab-barra" data-aos="fade-up">
+      <button class="activo" onclick="switchTabCatalogos('organizaciones', this)">Organizaciones</button>
+      <button onclick="switchTabCatalogos('cargos', this)">Cargos</button>
+      <button onclick="switchTabCatalogos('departamentos', this)">Departamentos</button>
+      <button onclick="switchTabCatalogos('provincias', this)">Provincias</button>
+      <button onclick="switchTabCatalogos('distritos', this)">Distritos</button>
+    </div>
+    <div id="tab-organizaciones">
+      <div class="gc-quickadd">
+        <div class="gc-field">
+          <label for="new-org-nombre">Nombre</label>
+          <input class="form-control form-control-sm" type="text" id="new-org-nombre"
+            placeholder="Ej. Partido A" oninput="quitarError(this)">
+        </div>
+        <div class="gc-field" style="max-width:180px;">
+          <label for="new-org-tipo">Tipo</label>
+          <select class="form-select form-select-sm" id="new-org-tipo">
+            <option value="partido">Partido</option>
+            <option value="institucion">Institución</option>
+            <option value="empresa">Empresa</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="crearOrganizacionCatalogo()">+ Crear organización</button>
+      </div>
+      <div id="alerta-organizaciones" class="mb-2"></div>
+
+      <div class="gc-search mb-3">
+        <input type="text" class="form-control form-control-sm" id="buscar-organizaciones"
+          placeholder="Buscar por nombre…" oninput="filtrarTabla('buscar-organizaciones', 'tbody-organizaciones')">
+      </div>
+      <div class="gc-table-wrap">
+        <table class="table gc-table">
+          <thead>
+            <tr><th>Nombre</th><th>Tipo</th><th>En uso</th><th></th></tr>
+          </thead>
+          <tbody id="tbody-organizaciones">
+            <tr><td colspan="4" class="text-muted text-center py-3">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="tab-cargos" style="display:none;">
+      <div class="gc-quickadd">
+        <div class="gc-field">
+          <label for="new-cargo-nombre">Nombre del cargo</label>
+          <input class="form-control form-control-sm" type="text" id="new-cargo-nombre"
+            placeholder="Ej. Alcalde, Decano" oninput="quitarError(this)">
+        </div>
+        <div class="gc-field" style="max-width:180px;">
+          <label for="new-cargo-tipo">Tipo</label>
+          <select class="form-select form-select-sm" id="new-cargo-tipo">
+            <option value="nacional">Nacional</option>
+            <option value="distrital">Distrital</option>
+            <option value="provincial">Provincial</option>
+            <option value="departamental">Departamental</option>
+            <option value="institucional">Institucional</option>
+            <option value="partido">Partido</option>
+          </select>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="crearCargoCatalogo()">+ Crear cargo</button>
+      </div>
+      <div id="alerta-cargos" class="mb-2"></div>
+
+      <div class="gc-search mb-3">
+        <input type="text" class="form-control form-control-sm" id="buscar-cargos"
+          placeholder="Buscar por nombre…" oninput="filtrarTabla('buscar-cargos', 'tbody-cargos')">
+      </div>
+      <div class="gc-table-wrap">
+        <table class="table gc-table">
+          <thead>
+            <tr><th>Nombre</th><th>Tipo</th><th>En uso</th><th></th></tr>
+          </thead>
+          <tbody id="tbody-cargos">
+            <tr><td colspan="4" class="text-muted text-center py-3">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-departamentos" style="display:none;">
+      <div class="gc-quickadd">
+        <div class="gc-field">
+          <label for="new-dep-nombre">Nombre del departamento</label>
+          <input class="form-control form-control-sm" type="text" id="new-dep-nombre"
+            placeholder="Ej. Lima" oninput="quitarError(this)">
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="crearDepartamentoCatalogo()">+ Crear departamento</button>
+      </div>
+      <div id="alerta-departamentos" class="mb-2"></div>
+
+      <div class="gc-search mb-3">
+        <input type="text" class="form-control form-control-sm" id="buscar-departamentos"
+          placeholder="Buscar por nombre…" oninput="filtrarTabla('buscar-departamentos', 'tbody-departamentos')">
+      </div>
+      <div class="gc-table-wrap">
+        <table class="table gc-table">
+          <thead>
+            <tr><th>Nombre</th><th>Provincias</th><th></th></tr>
+          </thead>
+          <tbody id="tbody-departamentos">
+            <tr><td colspan="3" class="text-muted text-center py-3">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-provincias" style="display:none;">
+      <div class="gc-quickadd">
+        <div class="gc-field">
+          <label for="new-prov-nombre">Nombre de la provincia</label>
+          <input class="form-control form-control-sm" type="text" id="new-prov-nombre"
+            placeholder="Ej. Lima" oninput="quitarError(this)">
+        </div>
+        <div class="gc-field">
+          <label for="new-prov-departamento">Departamento</label>
+          <select class="form-select form-select-sm" id="new-prov-departamento"></select>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="crearProvinciaCatalogo()">+ Crear provincia</button>
+      </div>
+      <div id="alerta-provincias" class="mb-2"></div>
+
+      <div class="gc-search mb-3">
+        <input type="text" class="form-control form-control-sm" id="buscar-provincias"
+          placeholder="Buscar por nombre…" oninput="filtrarTabla('buscar-provincias', 'tbody-provincias')">
+      </div>
+      <div class="gc-table-wrap">
+        <table class="table gc-table">
+          <thead>
+            <tr><th>Nombre</th><th>Departamento</th><th>Distritos</th><th></th></tr>
+          </thead>
+          <tbody id="tbody-provincias">
+            <tr><td colspan="4" class="text-muted text-center py-3">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-distritos" style="display:none;">
+      <div class="gc-quickadd">
+        <div class="gc-field">
+          <label for="new-dist-nombre">Nombre del distrito</label>
+          <input class="form-control form-control-sm" type="text" id="new-dist-nombre"
+            placeholder="Ej. San Isidro" oninput="quitarError(this)">
+        </div>
+        <div class="gc-field">
+          <label for="new-dist-departamento">Departamento</label>
+          <select class="form-select form-select-sm" id="new-dist-departamento" onchange="onDepartamentoChangeNuevoDistrito()"></select>
+        </div>
+        <div class="gc-field">
+          <label for="new-dist-provincia">Provincia</label>
+          <select class="form-select form-select-sm" id="new-dist-provincia" disabled></select>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="crearDistritoCatalogo()">+ Crear distrito</button>
+      </div>
+      <div id="alerta-distritos" class="mb-2"></div>
+
+      <div class="gc-search mb-3">
+        <input type="text" class="form-control form-control-sm" id="buscar-distritos"
+          placeholder="Buscar por nombre…" oninput="filtrarTabla('buscar-distritos', 'tbody-distritos')">
+      </div>
+      <div class="gc-table-wrap">
+        <table class="table gc-table">
+          <thead>
+            <tr><th>Nombre</th><th>Provincia</th><th>Departamento</th><th>En uso</th><th></th></tr>
+          </thead>
+          <tbody id="tbody-distritos">
+            <tr><td colspan="5" class="text-muted text-center py-3">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modalEditarCatalogo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ec-titulo">Editar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="ec-id">
+          <input type="hidden" id="ec-catalogo">
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="ec-nombre">Nombre <span class="text-danger">*</span></label>
+            <input class="form-control" type="text" id="ec-nombre" oninput="quitarError(this)">
+            <div class="invalid-feedback">El nombre es obligatorio.</div>
+          </div>
+
+          <div class="mb-3" id="ec-tipo-wrap" style="display:none;">
+            <label class="form-label fw-semibold" for="ec-tipo">Tipo</label>
+            <select class="form-select" id="ec-tipo"></select>
+          </div>
+
+          <div class="mb-3" id="ec-departamento-wrap" style="display:none;">
+            <label class="form-label fw-semibold" for="ec-departamento">Departamento <span class="text-danger">*</span></label>
+            <select class="form-select" id="ec-departamento" onchange="onDepartamentoChangeCatalogo()"></select>
+          </div>
+
+          <div class="mb-3" id="ec-provincia-wrap" style="display:none;">
+            <label class="form-label fw-semibold" for="ec-provincia">Provincia <span class="text-danger">*</span></label>
+            <select class="form-select" id="ec-provincia"></select>
+          </div>
+
+          <div id="ec-uso" class="text-muted small mb-2"></div>
+          <div id="ec-alerta"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-danger me-auto" onclick="borrarCatalogo()">Eliminar</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-danger" onclick="guardarEdicionCatalogo()">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/gestion-catalogo.js"></script>
+  <script src="/js/JavaScript.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>AOS.init();</script>
+</body>
+</html>
