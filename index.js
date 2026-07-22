@@ -12,5 +12,8 @@ app.get('/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'public/te
 app.get('/agregar-usuario', (req, res) => res.sendFile(path.join(__dirname, 'public/templates/agregar-usuario.html')));
 app.get('/agregar-admin', (req, res) => res.sendFile(path.join(__dirname, 'public/templates/agregar-admin.html')));
 app.get('/crear-votacion', (req, res) => res.sendFile(path.join(__dirname, 'public/templates/crear-votacion.html')));
+app.get('/gestion-cuenta', (req, res) => res.sendFile(path.join(__dirname, 'public/templates/gestion-cuenta.html')));
+app.get('/agregar-organizacion', (req, res) => res.sendFile(path.join(__dirname, 'public/templates/agregar-organizacion.html')));
+app.get('/gestion-catalogo', (req, res) => res.sendFile(path.join(__dirname, 'public/templates/gestion-catalogo.html')));
 
 app.listen(3001, () => console.log('Frontend en http://localhost:3001/login-usuario'));
