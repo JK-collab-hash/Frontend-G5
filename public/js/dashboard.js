@@ -66,7 +66,7 @@ function renderResultados(data) {
   filasCandidatos.forEach(r => {
     if (!grouped[r.votacionId]) {
       grouped[r.votacionId] = {
-        titulo: r.titulo, tipo: r.tipo, activa: r.activa, fecha_fin: r.fecha_fin, cerradaDefinitiva: r.cerradaDefinitiva,
+        titulo: r.titulo, tipo: r.tipo, activa: r.activa, fecha_fin: r.fecha_fin, cerradaDefinitiva: !!r.fechaCierreReal,
         candidatos: [], referendum: null
       };
     }
@@ -78,7 +78,7 @@ function renderResultados(data) {
   filasReferendums.forEach(r => {
     if (!grouped[r.votacionId]) {
       grouped[r.votacionId] = {
-        titulo: r.titulo, tipo: r.tipo, activa: r.activa, fecha_fin: r.fecha_fin, cerradaDefinitiva: r.cerradaDefinitiva,
+        titulo: r.titulo, tipo: r.tipo, activa: r.activa, fecha_fin: r.fecha_fin, cerradaDefinitiva: !!r.fechaCierreReal,
         candidatos: [], referendum: { norma: r.norma, aFavor: 0, enContra: 0 }
       };
     }
@@ -148,7 +148,10 @@ function renderResultados(data) {
     html += '</div>';
   });
 
-  const activasCount = Object.values(grouped).filter(v => v.activa).length;
+  const activasCount = Object.values(grouped).filter(v => {
+    const plazoVencido = v.fecha_fin && new Date(v.fecha_fin) <= new Date();
+    return v.activa && !v.cerradaDefinitiva && !plazoVencido;
+  }).length;
   document.getElementById('statVotaciones').textContent = activasCount;
   container.innerHTML = html;
 }
